@@ -1,64 +1,31 @@
 
 export class CatchSystem {
-  constructor(pokemonManager) {
-    this.pokemonManager = pokemonManager;
-    this.collection = this.load();
+  constructor(collectionManager) {
+    this.collection = collectionManager;
   }
 
-  load() {
-    try {
-      return JSON.parse(
-        localStorage.getItem('pokemon-go-3d-collection') || '[]'
-      );
-    } catch {
-      return [];
-    }
-  }
-
-  save() {
-    localStorage.setItem(
-      'pokemon-go-3d-collection',
-      JSON.stringify(this.collection)
-    );
-  }
-
-  attemptCatch(id) {
-    const pokemon = this.pokemonManager.getById(id);
-
-    if (!pokemon) {
-      return { success: false, message: '포켓몬을 찾을 수 없습니다.' };
+  attempt(monster, bonus = 0) {
+    if (!monster) {
+      return { success: false, message: "포획할 몬스터가 없다!" };
     }
 
-    const success = Math.random() < 0.7;
+    const rarity = Math.max(1, monster.rarity || 1);
+    const chance = Math.max(0.1, Math.min(0.95, 0.82 - rarity * 0.12 + bonus));
+    const success = Math.random() < chance;
 
-    if (!success) {
-      return { success: false, message: '포켓몬이 볼에서 빠져나왔습니다!' };
+    if (success) {
+      this.collection.add(monster);
+      return {
+        success: true,
+        message: `${monster.name} 포획 성공!`,
+        monster
+      };
     }
-
-    const record = {
-      id: `${Date.now()}-${id}`,
-      speciesId: pokemon.species.id,
-      name: pokemon.species.name,
-      color: pokemon.species.color,
-      cp: 100 + Math.floor(Math.random() * 401),
-      caughtAt: new Date().toISOString()
-    };
-
-    if (!this.pokemonManager.catchPokemon(id)) {
-      return { success: false, message: '포획에 실패했습니다.' };
-    }
-
-    this.collection.push(record);
-    this.save();
 
     return {
-      success: true,
-      message: `${record.name} 포획 성공!`,
-      pokemon: record
+      success: false,
+      message: `${monster.name}이(가) 몬스터볼에서 빠져나왔다!`,
+      monster
     };
-  }
-
-  getCollection() {
-    return [...this.collection];
   }
 }
