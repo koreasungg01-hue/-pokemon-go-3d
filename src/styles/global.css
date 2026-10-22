@@ -1,0 +1,58 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app,
+#game-world,
+#game-ui {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+  background: #82d0b4;
+  font-family: Arial, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  position: relative;
+  overflow: hidden;
+}
+
+#game-world {
+  position: absolute;
+  inset: 0;
+}
+
+#game-world canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#game-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#game-ui button {
+  pointer-events: auto;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
