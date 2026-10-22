@@ -2,12 +2,6 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './',
-  server: {
-    host: '0.0.0.0'
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets'
-  }
+  // GitHub 저장소 이름과 정확히 일치해야 함
+  base: '/pokemon-go-3d/',
 });
